@@ -18,6 +18,13 @@ class TodosControllerTest < ActionDispatch::IntegrationTest
     assert_response :created
   end
 
+  test "should not create todo with invalid params" do
+    assert_no_difference("Todo.count") do
+      post todos_url, params: { todo: { done: false, title: "" } }, as: :json
+    end
+    assert_response :unprocessable_entity
+  end
+
   test "should show todo" do
     get todo_url(@todo), as: :json
     assert_response :success
